@@ -1,0 +1,36 @@
+#!/bin/bash
+# chkconfig: 2345 20 80
+# description: Display arp-table
+. /etc/init.d/functions
+
+LOG=/home/maxim/arp_script/arp.log
+PID=/home/maxim/arp_script/arp_daemon.pid
+
+case "$1" in
+	start)
+		echo "$(date) service arp_daemon started" >> $LOG
+		/home/maxim/arp_script/arp_daemon.sh &
+		echo $!>$PID
+		;;
+	stop)
+		echo "$(date) service arp_daemon stopped" >> $LOG
+		kill 'cat $PID'
+		rm $PID
+		;;
+	restart)
+		$0 stop
+		$0 start
+		;;
+	status)
+		if [ -e $PID ]; then
+			echo arp_daemon is running, pid=$(cat $PID)
+		else
+			echo arp_daemon is NOT running
+			exit
+		fi
+		;;
+	*)
+		echo "Usage: $0 {start|stop"status|restart}"
+esac
+
+exit 0

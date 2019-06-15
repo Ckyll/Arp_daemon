@@ -1,0 +1,5 @@
+#!/bin/bash
+
+LOG=/home/maxim/arp_script/arp.log
+arp -ei eth0 >> $LOG
+sleep 60
